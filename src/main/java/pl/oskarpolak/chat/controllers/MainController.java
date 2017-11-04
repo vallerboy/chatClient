@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import pl.oskarpolak.chat.models.SocketConnector;
 import pl.oskarpolak.chat.models.SocketObserver;
 
@@ -30,20 +31,30 @@ public class MainController implements Initializable, SocketObserver{
 
     public void initialize(URL location, ResourceBundle resources) {
         clickEnterOnWriteMessage();
+        clickButtonSend();
+        textMessages.setWrapText(true);
 
         socketConnector.connect();
         socketConnector.registerObserver(this);
     }
 
+    private void clickButtonSend() {
+        buttonSend.setOnMouseClicked(event -> sendAndClear());
+    }
+
     private void clickEnterOnWriteMessage() {
-        textWriteMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.ENTER){
-                    socketConnector.sendMessage(textWriteMessage.getText());
-                    textWriteMessage.clear();
-                }
+        textWriteMessage.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                sendAndClear();
             }
         });
+    }
+
+    private void sendAndClear() {
+        if(!textWriteMessage.getText().isEmpty()) {
+            socketConnector.sendMessage(textWriteMessage.getText());
+            textWriteMessage.clear();
+        }
     }
 
     public void onMessage(String s) {
