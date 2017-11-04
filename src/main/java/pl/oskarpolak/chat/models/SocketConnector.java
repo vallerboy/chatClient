@@ -53,7 +53,7 @@ public class SocketConnector {
 
     @OnMessage
     public void onMessage(Session session, String message){
-        System.out.println(message);
+        socketObservers.forEach(s -> s.onMessage(message));
     }
 
 
