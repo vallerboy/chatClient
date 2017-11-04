@@ -1,8 +1,13 @@
 package pl.oskarpolak.chat.models;
 
+import pl.oskarpolak.chat.controllers.MainController;
+
 import javax.websocket.*;
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @ClientEndpoint
 public class SocketConnector {
@@ -13,9 +18,11 @@ public class SocketConnector {
 
     private WebSocketContainer container;
     private Session session;
+    private List<SocketObserver> socketObservers;
 
     private SocketConnector() {
         container = ContainerProvider.getWebSocketContainer();
+        socketObservers = new ArrayList<>();
     }
 
     public void connect() {
@@ -50,4 +57,7 @@ public class SocketConnector {
     }
 
 
+    public void registerObserver(SocketObserver observer) {
+        socketObservers.add(observer);
+    }
 }

@@ -9,11 +9,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import pl.oskarpolak.chat.models.SocketConnector;
+import pl.oskarpolak.chat.models.SocketObserver;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainController implements Initializable{
+public class MainController implements Initializable, SocketObserver{
 
 
     @FXML
@@ -29,8 +30,9 @@ public class MainController implements Initializable{
 
     public void initialize(URL location, ResourceBundle resources) {
         clickEnterOnWriteMessage();
+
         socketConnector.connect();
-        socketConnector.sendMessage("Ping");
+        socketConnector.registerObserver(this);
     }
 
     private void clickEnterOnWriteMessage() {
@@ -42,5 +44,9 @@ public class MainController implements Initializable{
                 }
             }
         });
+    }
+
+    public void onMessage(String s) {
+        textMessages.appendText(s);
     }
 }
