@@ -8,7 +8,7 @@ public class MessageModel implements Serializable {
     }
 
     public enum MessageType {
-        MESSAGE(), OPEN_DIALOG();
+        MESSAGE(), OPEN_DIALOG(), CLOSE_WINDOW();
     }
 
     private String context;

@@ -2,6 +2,7 @@ package pl.oskarpolak.chat.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -84,6 +85,10 @@ public class MainController implements Initializable, SocketObserver{
                 alert.setTitle("Serwer");
                 alert.setContentText(messageModel.getContext());
                 alert.show();
+                break;
+            }
+            case CLOSE_WINDOW:{
+                Platform.exit();
                 break;
             }
         }
