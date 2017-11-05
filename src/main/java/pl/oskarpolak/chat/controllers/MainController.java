@@ -56,9 +56,17 @@ public class MainController implements Initializable, SocketObserver{
 
     private void sendAndClear() {
         if(!textWriteMessage.getText().isEmpty()) {
-            socketConnector.sendMessage(textWriteMessage.getText());
+            sendMessagePacket(textWriteMessage.getText());
             textWriteMessage.clear();
         }
+    }
+
+    private void sendMessagePacket(String message) {
+        MessageModel messageModel = new MessageModel();
+        messageModel.setContext(message);
+        messageModel.setMessageType(MessageModel.MessageType.MESSAGE);
+
+        socketConnector.sendMessage(GSON.toJson(message));
     }
 
     public void onMessage(String s) {
