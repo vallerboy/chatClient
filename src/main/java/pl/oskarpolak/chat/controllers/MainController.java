@@ -1,5 +1,7 @@
 package pl.oskarpolak.chat.controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import pl.oskarpolak.chat.models.MessageModel;
 import pl.oskarpolak.chat.models.SocketConnector;
 import pl.oskarpolak.chat.models.SocketObserver;
 
@@ -17,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable, SocketObserver{
 
+    public static final Gson GSON = new GsonBuilder().create();
 
     @FXML
     Button buttonSend;
@@ -58,6 +62,13 @@ public class MainController implements Initializable, SocketObserver{
     }
 
     public void onMessage(String s) {
-        textMessages.appendText(s);
+        MessageModel messageModel = GSON.fromJson(s, MessageModel.class);
+
+        switch (messageModel.getMessageType()){
+            case MESSAGE:{
+                textMessages.appendText(messageModel.getContext());
+                break;
+            }
+        }
     }
 }
