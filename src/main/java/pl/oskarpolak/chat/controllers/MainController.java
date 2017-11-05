@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -66,7 +67,7 @@ public class MainController implements Initializable, SocketObserver{
         messageModel.setContext(message);
         messageModel.setMessageType(MessageModel.MessageType.MESSAGE);
 
-        socketConnector.sendMessage(GSON.toJson(message));
+        socketConnector.sendMessage(GSON.toJson(messageModel));
     }
 
     public void onMessage(String s) {
@@ -75,6 +76,14 @@ public class MainController implements Initializable, SocketObserver{
         switch (messageModel.getMessageType()){
             case MESSAGE:{
                 textMessages.appendText(messageModel.getContext());
+                break;
+            }
+            case OPEN_DIALOG:{
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText("");
+                alert.setTitle("Serwer");
+                alert.setContentText(messageModel.getContext());
+                alert.show();
                 break;
             }
         }
