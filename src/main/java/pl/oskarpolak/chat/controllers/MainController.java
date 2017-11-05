@@ -62,20 +62,11 @@ public class MainController implements Initializable, SocketObserver{
                 sendAndClear();
             }else if(event.getCode() == KeyCode.UP){
                 parseUpKey();
-            }else if(event.getCode() == KeyCode.DOWN){
-                parseDownKey();
             }
         });
     }
 
-    private void parseDownKey() {
-        textWriteMessage.setText(commandList.get(index));
-        if(index + 1 > commandList.size() - 1){
-            index = 0;
-        }else {
-            index++;
-        }
-    }
+
 
     private void parseUpKey() {
         textWriteMessage.setText(commandList.get(index));
