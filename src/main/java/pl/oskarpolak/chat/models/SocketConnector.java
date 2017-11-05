@@ -1,5 +1,6 @@
 package pl.oskarpolak.chat.models;
 
+import javafx.application.Platform;
 import pl.oskarpolak.chat.controllers.MainController;
 
 import javax.websocket.*;
@@ -53,7 +54,9 @@ public class SocketConnector {
 
     @OnMessage
     public void onMessage(Session session, String message){
-        socketObservers.forEach(s -> s.onMessage(message));
+        socketObservers.forEach(s -> {
+            Platform.runLater(() -> s.onMessage(message));
+        });
     }
 
 
