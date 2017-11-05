@@ -18,6 +18,8 @@ import pl.oskarpolak.chat.models.SocketConnector;
 import pl.oskarpolak.chat.models.SocketObserver;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable, SocketObserver{
@@ -33,11 +35,17 @@ public class MainController implements Initializable, SocketObserver{
     @FXML
     TextField textWriteMessage;
 
+    private List<String> commandList;
+    private int index;
+
     private SocketConnector socketConnector = SocketConnector.getInstance();
 
     public void initialize(URL location, ResourceBundle resources) {
+        commandList = new ArrayList<>();
         clickEnterOnWriteMessage();
         clickButtonSend();
+
+
         textMessages.setWrapText(true);
 
         socketConnector.connect();
@@ -52,12 +60,36 @@ public class MainController implements Initializable, SocketObserver{
         textWriteMessage.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER){
                 sendAndClear();
+            }else if(event.getCode() == KeyCode.UP){
+                parseUpKey();
+            }else if(event.getCode() == KeyCode.DOWN){
+                parseDownKey();
             }
         });
     }
 
+    private void parseDownKey() {
+        textWriteMessage.setText(commandList.get(index));
+        if(index + 1 > commandList.size() - 1){
+            index = 0;
+        }else {
+            index++;
+        }
+    }
+
+    private void parseUpKey() {
+        textWriteMessage.setText(commandList.get(index));
+        if(index - 1 < 0){
+            index = commandList.size() - 1;
+        }else {
+            index--;
+        }
+    }
+
     private void sendAndClear() {
         if(!textWriteMessage.getText().isEmpty()) {
+            commandList.add(textWriteMessage.getText());
+            index = commandList.size() - 1;
             sendMessagePacket(textWriteMessage.getText());
             textWriteMessage.clear();
         }
